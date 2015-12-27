@@ -9,18 +9,32 @@
         <constructor-arg value="rsc/ConfigServer.xml"/>
     </bean>
 
-       <bean id="checkLogic" class="vlab.server_java.CheckLogicImpl"/>
-       <bean id="generateLogic" class="vlab.server_java.GenerateLogicImpl"/>
-       <bean id="calculateLogic" class="vlab.server_java.CalculateLogicImpl"/>
+    <bean id="preCheckProcessor"
+          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
+          c:clazz="vlab.server_java.check.PreCheckProcessorImpl"/>
+    <bean id="checkProcessor"
+          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
+          c:clazz="vlab.server_java.check.CheckProcessorImpl"/>
+    <bean id="postCheckProcessor"
+          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
+          c:clazz="vlab.server_java.check.PostCheckProcessorImpl"/>
+    <bean id="generateProcessor"
+          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
+          c:clazz="vlab.server_java.generate.GenerateProcessorImpl"/>
+    <bean id="calculateProcessor"
+          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
+          c:clazz="vlab.server_java.calculate.CalculateProcessorImpl"/>
 
-       <bean id="logicContainer"
-             class="rlcp.server.logic.LogicContainer"
-             p:checkLogic-ref="checkLogic"
-             p:generateLogic-ref="generateLogic"
-             p:calculateLogic-ref="calculateLogic"/>
+    <bean id="container"
+          class="rlcp.server.processor.factory.ProcessorFactoryContainer"
+          p:generateProcessorFactory-ref="generateProcessor"
+          p:calculateProcessorFactory-ref="calculateProcessor"
+          p:preCheckProcessorFactory-ref="preCheckProcessor"
+          p:checkProcessorFactory-ref="checkProcessor"
+          p:postCheckProcessorFactory-ref="postCheckProcessor"/>
 
-       <bean id="server"
-             class="rlcp.server.Server"
-             c:configPath-ref="configPath"
-             c:logicContainer-ref="logicContainer"/>
+    <bean id="server"
+          class="rlcp.server.Server"
+          c:configPath-ref="configPath"
+          c:processorFactoryContainer-ref="container"/>
 </beans>
