@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import rlcp.Rlcp;
 import rlcp.calculate.RlcpCalculateRequest;
 import rlcp.calculate.RlcpCalculateRequestBody;
 import rlcp.calculate.RlcpCalculateResponse;
@@ -35,7 +36,7 @@ import java.nio.file.PathMatcher;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:test-java-server-config.xml"})
+@ContextConfiguration(locations = {"classpath:test-js-server-config.xml"})
 public class ServerFilesTests {
 
     @Autowired
@@ -73,18 +74,18 @@ public class ServerFilesTests {
                         String rawRequest = readFile(p);
                         try {
 
-                            RlcpGenerateRequestBody rlcpRequestBody = Generate.getInstance().getParser().parseRequestBody(rawRequest);
+                            RlcpGenerateRequestBody rlcpRequestBody = Rlcp.parseRequestBody(rawRequest, RlcpGenerateRequestBody.class);
                             RlcpGenerateRequest rlcpRequest = rlcpRequestBody.prepareRequest(url);
                             RlcpGenerateResponse actualRlcpResponse = rlcpRequest.execute();
 
                             Path responsePath = p.getParent().resolve(p.getFileName().toString().replaceAll(".generateRlcpRequest", ".generateRlcpResponse"));
                             String rawResponse = readFile(responsePath);
-                            RlcpGenerateResponseBody rlcpResponse = Generate.getInstance().getParser().parseResponseBody(rawResponse);
+                            RlcpGenerateResponseBody rlcpResponse = Rlcp.parseResponseBody(rawResponse, RlcpGenerateResponseBody.class);
 
                             assertEquals(actualRlcpResponse.getMethod().getName(), rlcpResponse.getMethod().getName());
-                            assertEquals(actualRlcpResponse.getBody().getText(), rlcpResponse.getText());
-                            assertEquals(actualRlcpResponse.getBody().getCode(), rlcpResponse.getCode());
-                            assertEquals(actualRlcpResponse.getBody().getInstructions(), rlcpResponse.getInstructions());
+                            assertEquals(actualRlcpResponse.getBody().getGeneratingResult().getText(), rlcpResponse.getGeneratingResult().getText());
+                            assertEquals(actualRlcpResponse.getBody().getGeneratingResult().getCode(), rlcpResponse.getGeneratingResult().getCode());
+                            assertEquals(actualRlcpResponse.getBody().getGeneratingResult().getInstructions(), rlcpResponse.getGeneratingResult().getInstructions());
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -104,13 +105,13 @@ public class ServerFilesTests {
                         String rawRequest = readFile(p);
                         try {
 
-                            RlcpCheckRequestBody rlcpRequestBody = Check.getInstance().getParser().parseRequestBody(rawRequest);
+                            RlcpCheckRequestBody rlcpRequestBody = Rlcp.parseRequestBody(rawRequest, RlcpCheckRequestBody.class);
                             RlcpCheckRequest rlcpRequest = rlcpRequestBody.prepareRequest(url);
                             RlcpCheckResponse actualRlcpResponse = rlcpRequest.execute();
 
                             Path responsePath = p.getParent().resolve(p.getFileName().toString().replaceAll(".checkRlcpRequest", ".checkRlcpResponse"));
                             String rawResponse = readFile(responsePath);
-                            RlcpCheckResponseBody rlcpResponse = Check.getInstance().getParser().parseResponseBody(rawResponse);
+                            RlcpCheckResponseBody rlcpResponse = Rlcp.parseResponseBody(rawResponse, RlcpCheckResponseBody.class);
 
                             assertEquals(actualRlcpResponse.getMethod().getName(), rlcpResponse.getMethod().getName());
                             actualRlcpResponse.getBody().getResults().forEach(
@@ -139,17 +140,17 @@ public class ServerFilesTests {
                         String rawRequest = readFile(p);
                         try {
 
-                            RlcpCalculateRequestBody rlcpRequestBody = Calculate.getInstance().getParser().parseRequestBody(rawRequest);
+                            RlcpCalculateRequestBody rlcpRequestBody = Rlcp.parseRequestBody(rawRequest, RlcpCalculateRequestBody.class);
                             RlcpCalculateRequest rlcpRequest = rlcpRequestBody.prepareRequest(url);
                             RlcpCalculateResponse actualRlcpResponse = rlcpRequest.execute();
 
                             Path responsePath = p.getParent().resolve(p.getFileName().toString().replaceAll(".calculateRlcpRequest", ".calculateRlcpResponse"));
                             String rawResponse = readFile(responsePath);
-                            RlcpCalculateResponseBody rlcpResponse = Calculate.getInstance().getParser().parseResponseBody(rawResponse);
+                            RlcpCalculateResponseBody rlcpResponse = Rlcp.parseResponseBody(rawResponse, RlcpCalculateResponseBody.class);
 
                             assertEquals(actualRlcpResponse.getMethod().getName(), rlcpResponse.getMethod().getName());
-                            assertEquals(actualRlcpResponse.getBody().getText(), rlcpResponse.getText());
-                            assertEquals(actualRlcpResponse.getBody().getCode(), rlcpResponse.getCode());
+                            assertEquals(actualRlcpResponse.getBody().getCalculatingResult().getText(), rlcpResponse.getCalculatingResult().getText());
+                            assertEquals(actualRlcpResponse.getBody().getCalculatingResult().getCode(), rlcpResponse.getCalculatingResult().getCode());
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -165,7 +166,7 @@ public class ServerFilesTests {
         try {
             StringBuilder rawRequestBuilder = new StringBuilder();
             CharBuffer charBuffer = CharBuffer.allocate((int) Files.size(p));
-            BufferedReader br = Files.newBufferedReader(p, Charset.forName("windows-1251"));
+            BufferedReader br = Files.newBufferedReader(p);
             while (br.ready()) {
                 br.read(charBuffer);
                 charBuffer.flip();

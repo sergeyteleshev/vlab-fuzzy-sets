@@ -3,15 +3,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import rlcp.PreGenerated;
-import rlcp.server.logic.CheckLogic;
-import vlab.server_java.CheckLogicImpl;
+import rlcp.check.ConditionForChecking;
+import rlcp.generate.GeneratingResult;
+import rlcp.server.processor.check.CheckProcessor;
+import rlcp.server.processor.check.PreCheckResultAwareCheckProcessor;
+import rlcp.server.processor.factory.DefaultConstructorProcessorFactory;
 
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -20,25 +21,25 @@ import static org.mockito.Mockito.when;
 public class CheckLogicTests {
     private static final double DELTA = 1e-15;
     @Autowired
-    private CheckLogic checkLogic;
+    private DefaultConstructorProcessorFactory checkProcessor;
 
     @Test
     public void testCheckSingleCondition() throws Exception {
-        assertEquals("", checkLogic.getOutput());
+        PreCheckResultAwareCheckProcessor processor = (PreCheckResultAwareCheckProcessor) checkProcessor.getInstance();
 
-        PreGenerated preGenerated = mock(PreGenerated.class);
-        when(preGenerated.getText()).thenReturn("textPreGenerated");
-        when(preGenerated.getCode()).thenReturn("codePreGenerated");
-        when(preGenerated.getInstructions()).thenReturn("instructionsPreGenerated");
-        float result = checkLogic.checkSingleCondition("input", "expectedOutput", "instructions", preGenerated);
-        assertEquals(1, result, DELTA);
-        assertThat(checkLogic.getOutput(), is(not(equalTo(""))));
-        assertThat(checkLogic.getOutput(), is(equalTo("ok")));
-    }
+        GeneratingResult generatingResult = mock(GeneratingResult.class);
+        when(generatingResult.getText()).thenReturn("textPreGenerated");
+        when(generatingResult.getCode()).thenReturn("codePreGenerated");
+        when(generatingResult.getInstructions()).thenReturn("instructionsPreGenerated");
 
+        ConditionForChecking conditionForChecking = mock(ConditionForChecking.class);
+        when(conditionForChecking.getId()).thenReturn(1);
+        when(conditionForChecking.getTime()).thenReturn(Long.parseLong("50"));
+        when(conditionForChecking.getOutput()).thenReturn("getOutput");
+        when(conditionForChecking.getInput()).thenReturn("getInput");
 
-    @Test
-    public void testNewInstance(){
-        assertEquals(CheckLogicImpl.class, checkLogic.newInstance().getClass());
+        CheckProcessor.CheckingSingleConditionResult result = processor.checkSingleCondition(conditionForChecking, "instructions", generatingResult);
+        assertThat(result.getComment(), is(not(equalTo(""))));
+        assertThat(result.getResult(), is(not(equalTo(""))));
     }
 }

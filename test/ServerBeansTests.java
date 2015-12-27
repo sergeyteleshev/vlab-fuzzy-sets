@@ -73,9 +73,9 @@ public class ServerBeansTests {
                         assertThat(actualResponse.toString(), is(not(equalTo(""))));
                         assertEquals(actualResponse.getMethod().getName(), generateResponse.getMethod().getName());
 
-                        assertEquals(actualResponse.getBody().getText(), generateResponse.getText());
-                        assertEquals(actualResponse.getBody().getCode(), generateResponse.getCode());
-                        assertEquals(actualResponse.getBody().getInstructions(), generateResponse.getInstructions());
+                        assertEquals(actualResponse.getBody().getGeneratingResult().getText(), generateResponse.getGeneratingResult().getText());
+                        assertEquals(actualResponse.getBody().getGeneratingResult().getCode(), generateResponse.getGeneratingResult().getCode());
+                        assertEquals(actualResponse.getBody().getGeneratingResult().getInstructions(), generateResponse.getGeneratingResult().getInstructions());
 
                     } catch (IOException | BadRlcpResponseException | BadRlcpRequestException e) {
                         e.printStackTrace();
@@ -120,8 +120,8 @@ public class ServerBeansTests {
                         assertThat(actualResponse.toString(), is(not(equalTo(""))));
                         assertEquals(actualResponse.getMethod().getName(), calculateResponse.getMethod().getName());
 
-                        assertEquals(actualResponse.getBody().getText(), calculateResponse.getText());
-                        assertEquals(actualResponse.getBody().getCode(), calculateResponse.getCode());
+                        assertEquals(actualResponse.getBody().getCalculatingResult().getText(), calculateResponse.getCalculatingResult().getText());
+                        assertEquals(actualResponse.getBody().getCalculatingResult().getCode(), calculateResponse.getCalculatingResult().getCode());
                     } catch (IOException | BadRlcpResponseException | BadRlcpRequestException e) {
                         e.printStackTrace();
                     }

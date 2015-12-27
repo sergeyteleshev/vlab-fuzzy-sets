@@ -3,8 +3,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import rlcp.server.logic.GenerateLogic;
-import vlab.server_java.GenerateLogicImpl;
+import rlcp.generate.GeneratingResult;
+import rlcp.server.processor.factory.DefaultConstructorProcessorFactory;
+import rlcp.server.processor.generate.GenerateProcessor;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -16,25 +17,16 @@ import static org.junit.Assert.*;
 public class GenerateLogicTests {
 
     @Autowired
-    private GenerateLogic generateLogic;
+    private DefaultConstructorProcessorFactory generateProcessor;
 
     @Test
-    public void testProcess(){
-        assertEquals("", generateLogic.getText());
-        assertEquals("", generateLogic.getCode());
-        assertEquals("", generateLogic.getInstructions());
-
-        generateLogic.process("");
-        assertThat(generateLogic.getText(), is(not(equalTo(""))));
-        assertThat(generateLogic.getCode(), is(not(equalTo(""))));
-        assertThat(generateLogic.getInstructions(), is(not(equalTo(""))));
+    public void testProcess() {
+        GenerateProcessor processor = (GenerateProcessor) generateProcessor.getInstance();
+        GeneratingResult result = processor.generate("generate");
+        assertThat(result.getText(), is(not(equalTo(""))));
+        assertThat(result.getCode(), is(not(equalTo(""))));
+        assertThat(result.getInstructions(), is(not(equalTo(""))));
     }
-
-    @Test
-    public void testNewInstance(){
-        assertEquals(GenerateLogicImpl.class, generateLogic.newInstance().getClass());
-    }
-
 
 
 }

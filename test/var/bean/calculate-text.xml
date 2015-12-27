@@ -8,7 +8,7 @@
        http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- ___________________ test1-calculateRequest ___________________-->
-    <bean id="preGenerated-test1" class="rlcp.PreGenerated"
+    <bean id="preGenerated-test1" class="rlcp.generate.GeneratingResult"
           c:text="text"
           c:code="code"
           c:instructions="instructions"/>

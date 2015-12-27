@@ -2,22 +2,22 @@
     <Conditions>
         <ConditionForCalculating Time="500">
             <Input>
-    <!-- òåñò-òåñò-òåñò -->
+    <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚ -->
             </Input>
         </ConditionForCalculating>
     </Conditions>
     <Instructions>
-<!-- òåñò-òåñò-òåñò2 -->
+<!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
     </Instructions>
     <PreGenerated>
         <Text>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Text>
         <Code>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Code>
         <Instructions>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Instructions>
     </PreGenerated>
 </Request>

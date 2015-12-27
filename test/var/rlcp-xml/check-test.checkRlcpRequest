@@ -2,33 +2,33 @@
     <Conditions>
         <ConditionForChecking id="1" Time="5">
             <Input>
-    <!-- òåñò-òåñò-òåñò -->
+    <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚ -->
             </Input>
             <Output>
-    <!-- òåñò-òåñò-òåñò3 -->
+    <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚3 -->
             </Output>
         </ConditionForChecking>
         <ConditionForChecking id="2" Time="5">
             <Input>
-    <!-- òåñò-òåñò-òåñò2 -->
+    <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
             </Input>
             <Output>
-    <!-- òåñò-òåñò-òåñò2 -->
+    <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
             </Output>
         </ConditionForChecking>
     </Conditions>
     <Instructions>
-<!-- òåñò-òåñò-òåñò2 -->
+<!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
     </Instructions>
     <PreGenerated>
         <Text>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Text>
         <Code>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Code>
         <Instructions>
-            <!-- òåñò-òåñò-òåñò2 -->
+            <!-- Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚-Ñ‚ÐµÑÑ‚2 -->
         </Instructions>
     </PreGenerated>
 </Request>
