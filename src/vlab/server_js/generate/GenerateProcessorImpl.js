@@ -1,4 +1,4 @@
-function generate(condition){
+function generate(condition) {
     var generatingResult = Java.type('rlcp.generate.GeneratingResult');
     print(condition);
     //do Generate logic here

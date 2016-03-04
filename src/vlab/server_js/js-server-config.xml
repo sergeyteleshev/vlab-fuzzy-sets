@@ -15,37 +15,25 @@
 
     <bean id="generateProcessor"
           class="rlcp.server.processor.factory.ScriptEngineFactory"
-            c:engineName-ref="engineJS"
-            c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}generate#{systemProperties['file.separator']}GenerateProcessorImpl.js"
-            c:clazz="rlcp.server.processor.generate.GenerateProcessor"/>
+          c:engineName-ref="engineJS"
+          c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}generate#{systemProperties['file.separator']}GenerateProcessorImpl.js"
+          c:clazz="rlcp.server.processor.generate.GenerateProcessor"/>
     <bean id="calculateProcessor"
           class="rlcp.server.processor.factory.ScriptEngineFactory"
           c:engineName-ref="engineJS"
           c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}calculate#{systemProperties['file.separator']}CalculateProcessorImpl.js"
           c:clazz="rlcp.server.processor.calculate.CalculateProcessor"/>
-    <bean id="preCheckProcessor"
-          class="rlcp.server.processor.factory.ScriptEngineFactory"
-          c:engineName-ref="engineJS"
-          c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}check#{systemProperties['file.separator']}PreCheckProcessorImpl.js"
-          c:clazz="rlcp.server.processor.check.PreCheckProcessor"/>
     <bean id="checkProcessor"
           class="rlcp.server.processor.factory.ScriptEngineFactory"
           c:engineName-ref="engineJS"
           c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}check#{systemProperties['file.separator']}CheckProcessorImpl.js"
           c:clazz="rlcp.server.processor.check.PreCheckResultAwareCheckProcessor"/>
-    <bean id="postCheckProcessor"
-          class="rlcp.server.processor.factory.ScriptEngineFactory"
-          c:engineName-ref="engineJS"
-          c:file="vlab#{systemProperties['file.separator']}server_js#{systemProperties['file.separator']}check#{systemProperties['file.separator']}PostCheckProcessorImpl.js"
-          c:clazz="rlcp.server.processor.check.PostCheckProcessor"/>
 
     <bean id="container"
           class="rlcp.server.processor.factory.ProcessorFactoryContainer"
           p:generateProcessorFactory-ref="generateProcessor"
           p:calculateProcessorFactory-ref="calculateProcessor"
-          p:preCheckProcessorFactory-ref="preCheckProcessor"
-          p:checkProcessorFactory-ref="checkProcessor"
-          p:postCheckProcessorFactory-ref="postCheckProcessor"/>
+          p:checkProcessorFactory-ref="checkProcessor"/>
 
     <bean id="server"
           class="rlcp.server.Server"

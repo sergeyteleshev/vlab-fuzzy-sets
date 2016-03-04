@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rlcp.Rlcp;
@@ -36,7 +37,8 @@ import java.nio.file.PathMatcher;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:test-js-server-config.xml"})
+@ContextConfiguration("classpath:test-*-server-config.xml")
+@ActiveProfiles(profiles = "js")
 public class ServerFilesTests {
 
     @Autowired
@@ -47,22 +49,18 @@ public class ServerFilesTests {
     private String testDir;
 
 
-    private Thread serverThread = new Thread() {
-        @Override
-        public void run() {
-            server.startServer();
-        }
-    };
+    private Thread serverThread;
 
     @Before
     public void startServer() {
-
+        serverThread = new Thread(server);
         serverThread.start();
     }
 
     @After
-    public void closeServer() {
-        serverThread.interrupt();
+    public void closeServer() throws InterruptedException {
+        server.stop();
+        serverThread.join();
     }
 
     @Test

@@ -1,6 +1,7 @@
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rlcp.calculate.RlcpCalculateRequest;
@@ -22,6 +23,7 @@ import rlcp.server.Server;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -30,7 +32,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:test-java-server-config.xml")
+@ContextConfiguration("classpath:test-*-server-config.xml")
+@ActiveProfiles(profiles = "java")
 public class ServerBeansTests {
 
     @Autowired
@@ -45,21 +48,18 @@ public class ServerBeansTests {
     private HashMap<RlcpCalculateRequestBody, RlcpCalculateResponseBody> calculateTest;
 
 
-    private Thread serverThread = new Thread() {
-        @Override
-        public void run() {
-            server.startServer();
-        }
-    };
+    private Thread serverThread;
 
     @Before
     public void startServer() {
+        serverThread = new Thread(server);
         serverThread.start();
     }
 
     @After
-    public void closeServer() {
-        serverThread.interrupt();
+    public void closeServer() throws InterruptedException {
+        server.stop();
+        serverThread.join();
     }
 
     @Test
@@ -97,7 +97,6 @@ public class ServerBeansTests {
                         actualResponse.getBody().getResults().forEach(
                                 (result) -> {
                                     int id = result.getId();
-//                                    assertEquals(result.getTime(), checkResponse.getResultById(id).getTime());
                                     assertEquals(result.getOutput(), checkResponse.getResultById(id).getOutput());
                                     assertEquals(result.getResult(), checkResponse.getResultById(id).getResult());
                                 }

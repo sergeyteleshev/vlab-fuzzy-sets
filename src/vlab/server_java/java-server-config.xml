@@ -9,15 +9,10 @@
         <constructor-arg value="rsc/ConfigServer.xml"/>
     </bean>
 
-    <bean id="preCheckProcessor"
-          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
-          c:clazz="vlab.server_java.check.PreCheckProcessorImpl"/>
+
     <bean id="checkProcessor"
           class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
           c:clazz="vlab.server_java.check.CheckProcessorImpl"/>
-    <bean id="postCheckProcessor"
-          class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
-          c:clazz="vlab.server_java.check.PostCheckProcessorImpl"/>
     <bean id="generateProcessor"
           class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
           c:clazz="vlab.server_java.generate.GenerateProcessorImpl"/>
@@ -29,9 +24,7 @@
           class="rlcp.server.processor.factory.ProcessorFactoryContainer"
           p:generateProcessorFactory-ref="generateProcessor"
           p:calculateProcessorFactory-ref="calculateProcessor"
-          p:preCheckProcessorFactory-ref="preCheckProcessor"
-          p:checkProcessorFactory-ref="checkProcessor"
-          p:postCheckProcessorFactory-ref="postCheckProcessor"/>
+          p:checkProcessorFactory-ref="checkProcessor"/>
 
     <bean id="server"
           class="rlcp.server.Server"

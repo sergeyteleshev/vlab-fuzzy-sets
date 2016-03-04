@@ -2,6 +2,8 @@ package vlab.server_java.check;
 
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
+import rlcp.server.processor.check.CheckProcessor;
+import rlcp.server.processor.check.PreCheckProcessor;
 import rlcp.server.processor.check.PreCheckProcessor.PreCheckResult;
 import rlcp.server.processor.check.PreCheckResultAwareCheckProcessor;
 
@@ -22,7 +24,5 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
     }
 
     @Override
-    public void setPreCheckResult(PreCheckResult<String> preCheckResult) {
-        preCheckResult.getValue();
-    }
+    public void setPreCheckResult(PreCheckResult<String> preCheckResult) {}
 }

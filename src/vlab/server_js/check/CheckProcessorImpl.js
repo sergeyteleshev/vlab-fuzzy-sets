@@ -17,7 +17,4 @@ function checkSingleCondition(condition, instructions, generatingResult){
     return result;
 }
 
-function setPreCheckResult(preCheckResult){
-    print (preCheckResult['value']);
-
-}
+function setPreCheckResult(preCheckResult){}

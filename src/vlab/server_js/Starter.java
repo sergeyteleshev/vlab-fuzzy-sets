@@ -5,9 +5,6 @@ import rlcp.server.Server;
 
 /**
  * Main class for RLCP-server starting.
-
- *
- * @author Eugene Efimchick
  */
 public class Starter {
 
@@ -19,6 +16,7 @@ public class Starter {
         context.load("classpath:vlab/server_js/js-server-config.xml");
         context.refresh();
 
-        context.getBean("server", Server.class).startServer();
+//        context.getBean("server", Server.class).startServer();
+        new Thread(context.getBean("server", Server.class)).start();
     }
 }

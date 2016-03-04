@@ -1,12 +1,14 @@
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import rlcp.calculate.CalculatingResult;
 import rlcp.generate.GeneratingResult;
 import rlcp.server.processor.calculate.CalculateProcessor;
 import rlcp.server.processor.factory.DefaultConstructorProcessorFactory;
+import rlcp.server.processor.factory.ProcessorFactory;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -16,11 +18,13 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:test-java-server-config.xml")
+@ContextConfiguration("classpath:test-*-server-config.xml")
+@ActiveProfiles(profiles = "java")
+//@ActiveProfiles(profiles = "js")
 public class CalculateLogicTests {
 
     @Autowired
-    private DefaultConstructorProcessorFactory calculateProcessor;
+    private ProcessorFactory calculateProcessor;
 
     @Test
     public void testProcess() {
