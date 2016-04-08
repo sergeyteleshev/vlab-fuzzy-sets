@@ -142,12 +142,29 @@
             <fileset dir="${dir.reference.lib}" includes="**/*.jar"/>
         </copy>
 
-        <jar destfile="${dir.reference.dist.server}/${dist.server.name}" basedir="${dir.reference.build}">
-            <manifest>
-                <attribute name="Main-Class" value="vlab.server_java.Starter"/>
-                <attribute name="Class-Path" value="${manifest.classpath}"/>
-            </manifest>
-        </jar>
+        <if>
+            <equals arg1="${dev.language}" arg2="java"/>
+            <then>
+                <jar destfile="${dir.reference.dist.server}/${dist.server.name}" basedir="${dir.reference.build}">
+                    <manifest>
+                        <attribute name="Main-Class" value="${tool.class.js}"/>
+                        <attribute name="Class-Path" value="${manifest.classpath}"/>
+                    </manifest>
+                </jar>
+            </then>
+            <elseif>
+                <equals arg1="${dev.language}" arg2="js"/>
+                <then>
+                    <jar destfile="${dir.reference.dist.server}/${dist.server.name}" basedir="${dir.reference.build}">
+                        <manifest>
+                            <attribute name="Main-Class" value="${tool.class.js}"/>
+                            <attribute name="Class-Path" value="${manifest.classpath}"/>
+                        </manifest>
+                    </jar>
+                </then>
+            </elseif>
+        </if>
+
 
         <copy todir="${dir.reference.dist.server}">
             <fileset dir="." includes="${dir.reference.rsc}/${config.name}.*"/>
@@ -161,92 +178,29 @@
     </target>
 
 
-    <!-- ??????????????????????????????????????????????????????????????????????????????????????? -->
     <target name="make.vltest.zip" depends="make.server, make.tool">
         <mkdir dir="${dir.reference.temp}"/>
 
         <copy todir="${dir.reference.temp}/server">
             <fileset file="${dir.reference.dist.server}/${dist.server.name}"/>
+            <fileset dir="${dir.reference.dist.server}" includes="${dir.reference.lib}/**"/>
             <fileset dir="${dir.reference.dist.server}" includes="${dir.reference.rsc}/**"/>
         </copy>
 
-        <copy todir="${dir.reference.temp}/virtual_stand">
-            <fileset file="${dir.reference.dist.tool}/${dist.tool.name}"/>
+        <copy todir="${dir.reference.temp}/tool">
+            <fileset dir="${dir.reference.dist.tool}" includes="**/**"/>
         </copy>
 
         <mkdir dir="${dir.reference.temp}/frames"/>
         <copy file="${dir.reference.rsc}/LaboratoryFrames.xml"
               tofile="${dir.reference.temp}/frames/LaboratoryFrames.xml"/>
 
-        <echo file="${dir.reference.temp}/lab.desc" append="true">
-            name=${ant.project.name}
-        </echo>
-        <echo file="${dir.reference.temp}/lab.desc" append="true">
-            toolclass=${tool.class}
-        </echo>
+        <echo file="${dir.reference.temp}/lab.desc" append="true">name=${ant.project.name}</echo>
 
         <zip compress="false" destfile="${dir.reference.vltestdist}/${dist.vltest.name}"
              basedir="${dir.reference.temp}"/>
         <delete quiet="true" dir="${dir.reference.temp}"/>
     </target>
-
-
-
-    <target name="make.academicnt.zips" depends="make.server, make.tool">
-        <available property="dir.reference.academicnt.exists" file="${dir.reference.academicnt}"/>
-        <available property="dir.reference.academicnt.laboratories.exists"
-                   file="${dir.reference.academicnt}/Laboratories.xml"/>
-        <available property="dir.reference.academicnt.laboratoryframes.exists"
-                   file="${dir.reference.academicnt}/LaboratoryFrames.xml"/>
-        <available property="dir.reference.academicnt.laboratorytools.exists"
-                   file="${dir.reference.academicnt}/LaboratoryTools.xml"/>
-
-        <fail unless="dir.reference.academicnt.exists">There is no ${dir.reference.academicnt} directory where files
-            necessary to build this target should be.
-        </fail>
-        <fail unless="dir.reference.academicnt.laboratories.exists">There is no
-            ${dir.reference.academicnt}/Laboratories.xml file necesary to build this target.
-        </fail>
-        <fail unless="dir.reference.academicnt.laboratoryframes.exists">There is no
-            ${dir.reference.academicnt}/LaboratoryFrames.xml file necesary to build this target.
-        </fail>
-        <fail unless="dir.reference.academicnt.laboratorytools.exists">There is no
-            ${dir.reference.academicnt}/LaboratoryTools.xml file necesary to build this target.
-        </fail>
-
-        <mkdir dir="${dir.reference.temp}"/>
-
-        <copy todir="${dir.reference.temp}/tools">
-            <fileset file="${dir.reference.dist.tool}/${dist.tool.name}"/>
-            <fileset file="${dir.reference.academicnt}/LaboratoryTools.xml"/>
-        </copy>
-
-        <mkdir dir="${dir.reference.temp}/frames"/>
-        <copy file="${dir.reference.academicnt}/LaboratoryFrames.xml"
-              tofile="${dir.reference.temp}/frames/LaboratoryFrames.xml"/>
-
-        <mkdir dir="${dir.reference.temp}/laboratories"/>
-        <copy file="${dir.reference.academicnt}/Laboratories.xml"
-              tofile="${dir.reference.temp}/laboratories/Laboratories.xml"/>
-
-        <copy todir="${dir.reference.temp}/server">
-            <fileset file="${dir.reference.dist.server}/${dist.server.name}"/>
-            <fileset dir="${dir.reference.dist.server}" includes="${dir.reference.rsc}/**"/>
-        </copy>
-
-        <zip compress="false" destfile="${dir.reference.academicntdist}/LaboratoryTools.zip"
-             basedir="${dir.reference.temp}/tools"/>
-        <zip compress="false" destfile="${dir.reference.academicntdist}/LaboratoryFrames.zip"
-             basedir="${dir.reference.temp}/frames"/>
-        <zip compress="false" destfile="${dir.reference.academicntdist}/Laboratories.zip"
-             basedir="${dir.reference.temp}/laboratories"/>
-        <zip compress="false" destfile="${dir.reference.academicntdist}/Server.zip"
-             basedir="${dir.reference.temp}/server"/>
-
-        <delete quiet="true" dir="${dir.reference.temp}"/>
-    </target>
-
-    <!-- ??????????????????????????????????????????????????????????????????????????????????????? -->
 
     <target name="run.test.server" depends="compile">
         <junit printsummary="yes" haltonerror="yes" haltonfailure="yes" fork="yes">
@@ -342,7 +296,10 @@
     </target>
 
     <target name="make.tool" depends="compile,clean.temp,injection.file">
-        <zip destfile="${dir.reference.dist.tool}/${dist.tool.name}" basedir="${dir.webapp.src}"/>
+        <copy todir="${dir.reference.dist.tool}">
+            <fileset dir="${dir.webapp.src}" includes="**/**"/>
+        </copy>
+        <!--<zip destfile="${dir.reference.dist.tool}/${dist.tool.name}" basedir="${dir.webapp.src}"/>-->
     </target>
 
     <target name="run.test.tool" depends="make.tool">
