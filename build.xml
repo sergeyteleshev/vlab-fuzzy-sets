@@ -147,7 +147,7 @@
             <then>
                 <jar destfile="${dir.reference.dist.server}/${dist.server.name}" basedir="${dir.reference.build}">
                     <manifest>
-                        <attribute name="Main-Class" value="${tool.class.js}"/>
+                        <attribute name="Main-Class" value="${tool.class.java}"/>
                         <attribute name="Class-Path" value="${manifest.classpath}"/>
                     </manifest>
                 </jar>
