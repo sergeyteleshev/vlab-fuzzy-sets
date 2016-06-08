@@ -178,7 +178,7 @@
     </target>
 
 
-    <target name="make.vltest.zip" depends="make.server, make.tool">
+    <target name="make.vltest.zip" depends="clean.vltest, make.server, make.tool">
         <mkdir dir="${dir.reference.temp}"/>
 
         <copy todir="${dir.reference.temp}/server">
@@ -289,6 +289,9 @@
         </foreach>
 
         <echo file="${temp.html}" append="true">
+            &lt;script&gt;
+            Vlab.init()
+            &lt;/script&gt;
             &lt;/body&gt;
             &lt;/html&gt;
         </echo>

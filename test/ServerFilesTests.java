@@ -37,8 +37,8 @@ import java.nio.file.PathMatcher;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:test-*-server-config.xml")
-@ActiveProfiles(profiles = "js")
+@ContextConfiguration("classpath:test-java-server-config.xml")
+//@ContextConfiguration("classpath:test-js-server-config.xml")
 public class ServerFilesTests {
 
     @Autowired

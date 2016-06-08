@@ -14,6 +14,7 @@ import rlcp.check.RlcpCheckResponse;
 import rlcp.check.RlcpCheckResponseBody;
 import rlcp.exception.BadRlcpRequestException;
 import rlcp.exception.BadRlcpResponseException;
+import rlcp.exception.RlcpException;
 import rlcp.generate.RlcpGenerateRequest;
 import rlcp.generate.RlcpGenerateRequestBody;
 import rlcp.generate.RlcpGenerateResponse;
@@ -32,8 +33,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:test-*-server-config.xml")
-@ActiveProfiles(profiles = "java")
+@ContextConfiguration("classpath:test-java-server-config.xml")
+//@ContextConfiguration("classpath:test-js-server-config.xml")
 public class ServerBeansTests {
 
     @Autowired
@@ -77,7 +78,7 @@ public class ServerBeansTests {
                         assertEquals(actualResponse.getBody().getGeneratingResult().getCode(), generateResponse.getGeneratingResult().getCode());
                         assertEquals(actualResponse.getBody().getGeneratingResult().getInstructions(), generateResponse.getGeneratingResult().getInstructions());
 
-                    } catch (IOException | BadRlcpResponseException | BadRlcpRequestException e) {
+                    } catch (RlcpException e) {
                         e.printStackTrace();
                     }
                 });
@@ -102,7 +103,7 @@ public class ServerBeansTests {
                                 }
                         );
 
-                    } catch (IOException | BadRlcpResponseException | BadRlcpRequestException e) {
+                    } catch (RlcpException e) {
                         e.printStackTrace();
                     }
                 });
@@ -121,7 +122,7 @@ public class ServerBeansTests {
 
                         assertEquals(actualResponse.getBody().getCalculatingResult().getText(), calculateResponse.getCalculatingResult().getText());
                         assertEquals(actualResponse.getBody().getCalculatingResult().getCode(), calculateResponse.getCalculatingResult().getCode());
-                    } catch (IOException | BadRlcpResponseException | BadRlcpRequestException e) {
+                    } catch (RlcpException e) {
                         e.printStackTrace();
                     }
                 });

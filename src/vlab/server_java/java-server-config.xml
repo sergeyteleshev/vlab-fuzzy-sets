@@ -20,6 +20,7 @@
           class="rlcp.server.processor.factory.DefaultConstructorProcessorFactory"
           c:clazz="vlab.server_java.calculate.CalculateProcessorImpl"/>
 
+
     <bean id="container"
           class="rlcp.server.processor.factory.ProcessorFactoryContainer"
           p:generateProcessorFactory-ref="generateProcessor"
