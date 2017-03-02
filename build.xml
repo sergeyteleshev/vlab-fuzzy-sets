@@ -70,11 +70,11 @@
         <if>
             <equals arg1="${dev.language}" arg2="java"/>
             <then>
-                <javac srcdir="${dir.reference.source.src}/vlab/server_java"
+                <javac srcdir="${dir.reference.source.src}/vlab"
                        destdir="${dir.reference.build}"
                        encoding="${project.encoding}"
-                       includeantruntime="false"
-                       classpathref="classpath"/>
+                       classpathref="classpath"
+                       excludes="server_js/**"/>
                 <copy todir="${dir.reference.build}">
                     <fileset dir="${dir.reference.source.src}" includes="**/**.xml" excludes="**/*js*.xml"/>
                 </copy>
@@ -94,11 +94,12 @@
             <elseif>
                 <equals arg1="${dev.language}" arg2="js"/>
                 <then>
-                    <javac srcdir="${dir.reference.source.src}/vlab/server_js"
+                    <javac srcdir="${dir.reference.source.src}/vlab/"
                            destdir="${dir.reference.build}"
                            encoding="${project.encoding}"
                            includeantruntime="false"
-                           classpathref="classpath"/>
+                           classpathref="classpath"
+                           excludes="server_java/**"/>
                     <copy todir="${dir.reference.build}">
                         <fileset dir="${dir.reference.source.src}" includes="**/**.xml" excludes="**/*java*.xml"/>
                         <fileset dir="${dir.reference.source.src}" includes="**/**.js"/>
