@@ -10,5 +10,5 @@ public class Consts {
     public static final double alpha = 0.7;
 
     public static final double setMinValue = 0.1;
-    public static final double setMaxValue = 0.9;
+    public static final double setMaxValue = 1;
 }
