@@ -7,7 +7,8 @@ public class Consts {
     public static final int R2SetRowsAmount = 4;
     public static final int R2SetColumnsAmount = 2;
 
-    public static final double alpha = 0.7;
+    public static final double significantElement = 0.7;
+    public static final double[] alphaValues = {0.7, 0.8, 0.9};
 
     public static final double setMinValue = 0.1;
     public static final double setMaxValue = 1;

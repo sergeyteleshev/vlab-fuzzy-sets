@@ -55,7 +55,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             boolean isCurrentRowValid = false;
             for(int j = 0; j < columnsAmount; j++)
             {
-                if (set[i][j] >= alpha)
+                if (set[i][j] >= significantElement)
                 {
                     isCurrentRowValid = true;
                     break;
@@ -65,7 +65,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             if(!isCurrentRowValid)
             {
                 int randomColumnElementIndex = generateRandomIntRange(0, set.length);
-                set[i][randomColumnElementIndex] = roundDoubleToNDecimals(generateRandomDoubleRange(alpha, setMaxValue), 1);
+                set[i][randomColumnElementIndex] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
             }
         }
 
@@ -75,7 +75,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             boolean isCurrentColumnValid = false;
             for(int j = 0; j < rowsAmount; j++)
             {
-                if(set[j][i] >= alpha)
+                if(set[j][i] >= significantElement)
                 {
                     isCurrentColumnValid = true;
                     break;
@@ -89,13 +89,13 @@ public class GenerateProcessorImpl implements GenerateProcessor {
                 while (!isValidColumnFound)
                 {
                     for(int t = 0; t < rowsAmount; t++)
-                        if(set[randomRowElementIndex][t] >= alpha)
+                        if(set[randomRowElementIndex][t] >= significantElement)
                             continue;
 
                     isValidColumnFound = true;
                 }
 
-                set[randomRowElementIndex][i] = roundDoubleToNDecimals(generateRandomDoubleRange(alpha, setMaxValue), 1);
+                set[randomRowElementIndex][i] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
             }
         }
 
