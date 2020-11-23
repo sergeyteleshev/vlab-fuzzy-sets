@@ -30,7 +30,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
         double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
 
-        comment = Arrays.toString(getCompositionMatrix(R1Set, R2Set));
+//        comment = Arrays.toString(getCompositionMatrix(R1Set, R2Set));
 
         return new CheckingSingleConditionResult(points, comment);
     }
