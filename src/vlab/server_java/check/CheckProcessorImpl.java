@@ -9,6 +9,8 @@ import rlcp.server.processor.check.PreCheckProcessor;
 import rlcp.server.processor.check.PreCheckProcessor.PreCheckResult;
 import rlcp.server.processor.check.PreCheckResultAwareCheckProcessor;
 import static vlab.server_java.Consts.*;
+import static vlab.server_java.generate.GenerateProcessorImpl.generateRandomIntRange;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 
@@ -23,20 +25,16 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         BigDecimal points = new BigDecimal(1.0);
         String comment = "it's ok";
 
-        try {
-            String code = generatingResult.getCode();
-            JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
-            JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
+        double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
 
-            double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
-            double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
-            comment = Arrays.toString(getCompositionMatrix(R1Set, R2Set));
-        }
-        catch (Exception e)
-        {
-            points = BigDecimal.valueOf(0.0);
-            comment = "Вы не заполнили все необходимые поля";
-        }
+        String code = generatingResult.getCode();
+        JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
+        JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
+
+        double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
+        double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
+        double[][] compositionMatrix = getCompositionMatrix(R1Set, R2Set);
+        int[][] significanceMatrix = significanceMatrix(compositionMatrix, alpha);
 
         return new CheckingSingleConditionResult(points, comment);
     }
@@ -70,6 +68,28 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         }
 
         return R1R2Set;
+    }
+
+    private static int[][] significanceMatrix(double[][] compositionMatrix, double alpha)
+    {
+        int[][] significanceMatrix = new int[compositionMatrix.length][compositionMatrix[0].length];
+
+        for(int i = 0; i < significanceMatrix.length; i++)
+        {
+            for(int j = 0; j < significanceMatrix[0].length; j++)
+            {
+                if(compositionMatrix[i][j] >= alpha)
+                {
+                    significanceMatrix[i][j] = 1;
+                }
+                else
+                {
+                    significanceMatrix[i][j] = 0;
+                }
+            }
+        }
+
+        return significanceMatrix;
     }
 
     public static double[][] twoDimensionalJsonArrayToDouble(JSONArray arr)
