@@ -23,38 +23,49 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         BigDecimal points = new BigDecimal(1.0);
         String comment = "it's ok";
 
-        String code = generatingResult.getCode();
-        JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
-        JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
+        try {
+            String code = generatingResult.getCode();
+            JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
+            JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
 
-        double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
-        double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
-
-//        comment = Arrays.toString(getCompositionMatrix(R1Set, R2Set));
+            double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
+            double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
+            comment = Arrays.toString(getCompositionMatrix(R1Set, R2Set));
+        }
+        catch (Exception e)
+        {
+            points = BigDecimal.valueOf(0.0);
+            comment = "Вы не заполнили все необходимые поля";
+        }
 
         return new CheckingSingleConditionResult(points, comment);
+    }
+
+    static double find_max_element_in_array(double[] arr)
+    {
+        double max = arr[0];
+
+        for (int i = 1; i < arr.length; i++)
+            if (arr[i] > max)
+                max = arr[i];
+
+        return max;
     }
 
     private static double[][] getCompositionMatrix(double[][] R1Set, double[][] R2Set)
     {
         double[][] R1R2Set = new double[R1SetRowsAmount][R2SetColumnsAmount];
-
-        for(int i = 0; i < R2SetColumnsAmount; i++)
+        for(int i = 0; i < R1SetRowsAmount; i++)
         {
-            int k = 0;
-            double[] minElements = new double[R2SetColumnsAmount];
-
-            for (int j = 0; j < R1SetColumnsAmount; j++)
+            for (int j = 0; j < R2SetColumnsAmount; j++)
             {
-                minElements[j] = Math.min(R1Set[j][i], R2Set[i][j]);
-            }
+                double[] minElements = new double[R1SetColumnsAmount];
+                for(int k = 0; k < R1SetColumnsAmount; k++)
+                {
+                    minElements[k] = Math.min(R1Set[i][k], R2Set[k][j]);
+                }
 
-            R1R2Set[k][i] = Arrays.stream(minElements).max().getAsDouble();
-            k = k + 1;
-
-            if(k == R2SetColumnsAmount)
-            {
-                k = 0;
+                R1R2Set[i][j] = Arrays.stream(minElements).max().getAsDouble();
             }
         }
 
@@ -67,7 +78,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
         for(int i = 0; i < arr.length(); i++)
         {
-            for(int j = 0; i < arr.getJSONArray(j).length(); j++)
+            for(int j = 0; j < arr.getJSONArray(i).length(); j++)
             {
                 result[i][j] = arr.getJSONArray(i).getDouble(j);
             }

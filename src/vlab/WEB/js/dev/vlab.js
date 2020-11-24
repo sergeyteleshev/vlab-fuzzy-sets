@@ -124,14 +124,13 @@ function init_lab() {
 
         //Инициализация ВЛ
         init : function(){
-            // this.div = document.getElementById("jsLab");
-            // this.div.innerHTML = this.window;
+            this.div = document.getElementById("jsLab");
+            this.div.innerHTML = this.window;
             // document.getElementById("tool").innerHTML = this.tool;
-            let jsLab = document.getElementById("jsLab");
-
             //получение варианта задания
             if(document.getElementById("preGeneratedCode") && document.getElementById("preGeneratedCode").value !== "")
             {
+                let jsLab = document.getElementById("jsLab");
                 //todo не парсится джейсон объект. вариант не приходит в интерфейс. посмотреть как в других лабах это делается
                 let generatedVariant = JSON.parse(document.getElementById("preGeneratedCode").value);
                 console.log(generatedVariant);
@@ -141,9 +140,9 @@ function init_lab() {
                         ...state,
                     }
                 });
-            }
 
-            renderTemplate(jsLab, getHTML({...generatedVariant}));
+                renderTemplate(jsLab, getHTML({...generatedVariant}));
+            }
         },
 
         getCondition: function(){},

@@ -24,8 +24,20 @@ public class GenerateProcessorImpl implements GenerateProcessor {
         String instructions = "instructions";
         JSONObject answer = new JSONObject();
 
-        double[][] R1Set = generateInitialSet(R1SetRowsAmount, R1SetColumnsAmount);
-        double[][] R2Set = generateInitialSet(R2SetRowsAmount, R2SetColumnsAmount);
+//        double[][] R1Set = generateInitialSet(R1SetRowsAmount, R1SetColumnsAmount);
+//        double[][] R2Set = generateInitialSet(R2SetRowsAmount, R2SetColumnsAmount);
+
+        double[][] R1Set = {
+            {0.8, 0.5, 0.2, 0.9},
+            {1, 0.9, 0.7, 0.3},
+            {0.7, 0.5, 0, 0.5},
+        };
+        double[][] R2Set = {
+            {0.8, 0.5},
+            {0.2, 0.7},
+            {0.9, 0.3},
+            {1, 0.7},
+        };
 
         answer.put("R1Set", R1Set);
         answer.put("R2Set", R2Set);
@@ -64,7 +76,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
 
             if(!isCurrentRowValid)
             {
-                int randomColumnElementIndex = generateRandomIntRange(0, set.length);
+                int randomColumnElementIndex = generateRandomIntRange(0, set[i].length - 1);
                 set[i][randomColumnElementIndex] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
             }
         }
@@ -84,18 +96,21 @@ public class GenerateProcessorImpl implements GenerateProcessor {
 
             if(!isCurrentColumnValid)
             {
-                int randomRowElementIndex = generateRandomIntRange(0, rowsAmount);
+                int randomRowElementIndex = generateRandomIntRange(0, rowsAmount - 1);
+                int validColumn = 0;
                 boolean isValidColumnFound = false;
                 while (!isValidColumnFound)
                 {
                     for(int t = 0; t < rowsAmount; t++)
                         if(set[randomRowElementIndex][t] >= significantElement)
                             continue;
+                        else
+                            validColumn = t;
 
                     isValidColumnFound = true;
                 }
 
-                set[randomRowElementIndex][i] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
+                set[randomRowElementIndex][validColumn] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
             }
         }
 
