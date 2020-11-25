@@ -14,6 +14,7 @@ function zeros(dimensions) {
 
 function getHTML(templateData)
 {
+    console.log("template", templateData);
     let R1Set = templateData.R1Set.slice();
     let R2Set = templateData.R2Set.slice();
     let compositionMatrix = [];
@@ -58,7 +59,7 @@ function getHTML(templateData)
         R2SetTable += `</table>`;
     }
 
-    if(templateData.compositionMatrix && templateData.compositionMatrix.length && templateData.isCompositionMatrixCreated)
+    if(templateData.compositionMatrix && templateData.compositionMatrix.length > 0 && templateData.isCompositionMatrixCreated)
     {
         compositionMatrix = templateData.compositionMatrix.slice();
         compositionMatrixTable += `<table class="R2SetTable">`;
@@ -68,7 +69,7 @@ function getHTML(templateData)
             compositionMatrixTable += `<tr>`;
             for(let j = 0; j < compositionMatrix[i].length; j++)
             {
-                compositionMatrixTable += `<td>${compositionMatrix[i][j]}</td>`;
+                compositionMatrixTable += `<td><input type="number" ${compositionMatrix[i][j]}</td></td>`;
             }
 
             compositionMatrixTable += `</tr>`;
@@ -152,7 +153,7 @@ function getHTML(templateData)
             </table> 
             <table class="compositionMatrixTable">
                 <tr class="compositionMatrixSize">
-                    <td>
+                    <td>                  
                         <h2>Введите размерность композиционной матрицы:</h2>
                         <input id="compositionMatrixRows" type="number"/>
                         <span>X</span>
@@ -273,7 +274,7 @@ function init_lab() {
                 const render = (state) => {
                     console.log('state', state);
                     console.log(appInstance);
-                    renderTemplate(jsLab, getHTML({...generatedVariant}));
+                    renderTemplate(jsLab, getHTML({...state}));
                     bindActionListeners(appInstance);
                 };
 
