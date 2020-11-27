@@ -4,12 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import rlcp.check.ConditionForChecking;
 import rlcp.generate.GeneratingResult;
-import rlcp.server.processor.check.CheckProcessor;
-import rlcp.server.processor.check.PreCheckProcessor;
 import rlcp.server.processor.check.PreCheckProcessor.PreCheckResult;
 import rlcp.server.processor.check.PreCheckResultAwareCheckProcessor;
 import static vlab.server_java.Consts.*;
-import static vlab.server_java.generate.GenerateProcessorImpl.generateRandomIntRange;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -22,21 +19,134 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
     @Override
     public CheckingSingleConditionResult checkSingleCondition(ConditionForChecking condition, String instructions, GeneratingResult generatingResult) throws Exception {
         //do check logic here
-        BigDecimal points = new BigDecimal(1.0);
-        String comment = "it's ok";
-
-        double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
+        double points = 0;
+        String comment = "";
 
         String code = generatingResult.getCode();
         JSONObject jsonCode = new JSONObject(code); // сгенерированный вариант
         JSONObject jsonInstructions = new JSONObject(instructions); // ответ пользователя
 
-        double[][] R1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
-        double[][] R2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
-        double[][] compositionMatrix = getCompositionMatrix(R1Set, R2Set);
-        int[][] significanceMatrix = significanceMatrix(compositionMatrix, alpha);
+        double[][] serverR1Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R1Set"));
+        double[][] serverR2Set = twoDimensionalJsonArrayToDouble(jsonCode.getJSONArray("R2Set"));
+        double alpha = jsonCode.getDouble("alpha");
 
-        return new CheckingSingleConditionResult(points, comment);
+        double[][] clientCompositionMatrix = twoDimensionalJsonArrayToDouble(jsonInstructions.getJSONArray("compositionMatrix"));
+        int[][] clientSignificanceMatrix = twoDimensionalJsonArrayToInt(jsonInstructions.getJSONArray("significanceMatrix"));
+        int clientCompositionMatrixColumns = jsonInstructions.getInt("compositionMatrixColumns");
+        int clientCompositionMatrixRows = jsonInstructions.getInt("compositionMatrixRows");
+
+
+        double[][] serverCompositionMatrix = getCompositionMatrix(serverR1Set, serverR2Set);
+        int[][] serverSignificanceMatrix = getSignificanceMatrix(serverCompositionMatrix, alpha);
+        double serverCompositionMatrixRows = serverCompositionMatrix.length;
+        double serverCompositionMatrixColumns = serverCompositionMatrix[0].length;
+
+        if(serverCompositionMatrixColumns == clientCompositionMatrixColumns)
+        {
+            points += compositionMatrixSizePoints / 2;
+        }
+        else
+        {
+            comment += "Неверное количество столбцов в композиционной матрице. ";
+        }
+
+        if(serverCompositionMatrixRows == clientCompositionMatrixRows)
+        {
+            points += compositionMatrixSizePoints / 2;
+        }
+        else
+        {
+            comment += "Неверное количество строк в композиционной матрице.";
+        }
+
+        if(points == compositionMatrixSizePoints)
+        {
+            JSONObject compositionMatrixCheckAnswer = checkCompositionMatrix(serverCompositionMatrix, clientCompositionMatrix, compositionMatrixPoints);
+            JSONObject significanceMatrixCheckAnswer = checkSignificanceMatrix(serverSignificanceMatrix, clientSignificanceMatrix, significanceMatrixPoints);
+
+            double compositionMatrixPoints = compositionMatrixCheckAnswer.getDouble("points");
+            String compositionMatrixComment = compositionMatrixCheckAnswer.getString("comment");
+
+            double significanceMatrixPoints = significanceMatrixCheckAnswer.getDouble("points");
+            String significanceMatrixComment = significanceMatrixCheckAnswer.getString("comment");
+
+            points += compositionMatrixPoints + significanceMatrixPoints;
+            comment += compositionMatrixComment + significanceMatrixComment;
+        }
+
+        return new CheckingSingleConditionResult(BigDecimal.valueOf(points), comment);
+    }
+
+    static JSONObject checkSignificanceMatrix(int[][] clientAnswer, int[][] serverAnswer, double points)
+    {
+        double matrixColumnsAmount = serverAnswer.length;
+        double matrixRowsAmount = serverAnswer[0].length;
+        double deltaPoints = points / (matrixColumnsAmount * matrixRowsAmount);
+        double clientPoints = 0;
+        StringBuilder comment = new StringBuilder();
+        JSONObject result = new JSONObject();
+
+        try
+        {
+            for(int i = 0; i < serverAnswer.length; i++)
+            {
+                for(int j = 0; j < serverAnswer[i].length; j++)
+                {
+                    if(serverAnswer[i][j] == clientAnswer[i][j])
+                        clientPoints += deltaPoints;
+                    else
+                    {
+                        comment.append("Неверное значение элемента SM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы устойчивости. ");
+                    }
+                }
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            comment = new StringBuilder("Неверный размер матрицы.");
+            clientPoints = 0;
+        }
+
+        result.put("points", clientPoints);
+        result.put("comment", comment.toString());
+
+        return result;
+    }
+
+    static JSONObject checkCompositionMatrix(double[][] clientAnswer, double[][] serverAnswer, double points)
+    {
+        double matrixColumnsAmount = serverAnswer.length;
+        double matrixRowsAmount = serverAnswer[0].length;
+        double deltaPoints = points / (matrixColumnsAmount * matrixRowsAmount);
+        double clientPoints = 0;
+        StringBuilder comment = new StringBuilder();
+        JSONObject result = new JSONObject();
+
+        try
+        {
+            for(int i = 0; i < serverAnswer.length; i++)
+            {
+                for(int j = 0; j < serverAnswer[i].length; j++)
+                {
+                    if(serverAnswer[i][j] == clientAnswer[i][j])
+                        clientPoints += deltaPoints;
+                    else
+                    {
+                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] композиционной матрицы. ");
+                    }
+                }
+            }
+        }
+        catch (ArrayIndexOutOfBoundsException e)
+        {
+            comment = new StringBuilder("Неверный размер матрицы. ");
+            clientPoints = 0;
+        }
+
+        result.put("points", clientPoints);
+        result.put("comment", comment.toString());
+
+        return result;
     }
 
     static double find_max_element_in_array(double[] arr)
@@ -70,7 +180,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         return R1R2Set;
     }
 
-    private static int[][] significanceMatrix(double[][] compositionMatrix, double alpha)
+    private static int[][] getSignificanceMatrix(double[][] compositionMatrix, double alpha)
     {
         int[][] significanceMatrix = new int[compositionMatrix.length][compositionMatrix[0].length];
 
@@ -101,6 +211,21 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
             for(int j = 0; j < arr.getJSONArray(i).length(); j++)
             {
                 result[i][j] = arr.getJSONArray(i).getDouble(j);
+            }
+        }
+
+        return result;
+    }
+
+    public static int[][] twoDimensionalJsonArrayToInt(JSONArray arr)
+    {
+        int[][] result = new int[arr.length()][arr.getJSONArray(0).length()];
+
+        for(int i = 0; i < arr.length(); i++)
+        {
+            for(int j = 0; j < arr.getJSONArray(i).length(); j++)
+            {
+                result[i][j] = arr.getJSONArray(i).getInt(j);
             }
         }
 

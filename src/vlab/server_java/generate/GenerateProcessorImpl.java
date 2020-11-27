@@ -24,30 +24,35 @@ public class GenerateProcessorImpl implements GenerateProcessor {
         String instructions = "instructions";
         JSONObject answer = new JSONObject();
 
-//        double[][] R1Set = generateInitialSet(R1SetRowsAmount, R1SetColumnsAmount);
-//        double[][] R2Set = generateInitialSet(R2SetRowsAmount, R2SetColumnsAmount);
+        double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
 
-        double[][] R1Set = {
-            {0.8, 0.5, 0.2, 0.9},
-            {1, 0.9, 0.7, 0.3},
-            {0.7, 0.5, 0, 0.5},
-        };
-        double[][] R2Set = {
-            {0.8, 0.5},
-            {0.2, 0.7},
-            {0.9, 0.3},
-            {1, 0.7},
-        };
+        double[][] R1Set = generateInitialSet(R1SetRowsAmount, R1SetColumnsAmount);
+        double[][] R2Set = generateInitialSet(R2SetRowsAmount, R2SetColumnsAmount);
+
+//        double[][] R1Set = {
+//            {0.8, 0.5, 0.2, 0.9},
+//            {1, 0.9, 0.7, 0.3},
+//            {0.7, 0.5, 0, 0.5},
+//        };
+//        double[][] R2Set = {
+//            {0.8, 0.5},
+//            {0.2, 0.7},
+//            {0.9, 0.3},
+//            {1, 0.7},
+//        };
 
         answer.put("R1Set", R1Set);
         answer.put("R2Set", R2Set);
+        answer.put("alpha", alpha);
 
         code = answer.toString();
-        text = "Постройте нечетое множество из множетсв R1 и R2";
+        text = "Постройте нечетое множество из множетсв R1 и R2. Alpha = " + alpha + ", значащий элемент = " + significantElement;
 
         return new GeneratingResult(text, code, instructions);
     }
 
+
+    //todo в столбах нет значащего элемента
     private static double[][] generateInitialSet(int rowsAmount, int columnsAmount)
     {
         double[][] set = new double[rowsAmount][columnsAmount];
