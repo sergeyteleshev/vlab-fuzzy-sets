@@ -23,6 +23,12 @@ function getHTML(templateData)
     let R2SetTable = '';
     let compositionMatrixTable = '';
 
+    let compositionMatrixColumnsInput = `<input id="compositionMatrixColumns" type="number"/>`;
+    let compositionMatrixRowsInput = `<input id="compositionMatrixRows" type="number"/>`;
+    let significanceMatrixApplyInput = ``;
+
+    let significanceMatrixContainer = ``;
+
     if(R1Set.length)
     {
         R1SetTable += `<table class="R1SetTable">`;
@@ -62,20 +68,55 @@ function getHTML(templateData)
     if(templateData.compositionMatrix && templateData.compositionMatrix.length > 0 && templateData.isCompositionMatrixCreated)
     {
         compositionMatrix = templateData.compositionMatrix.slice();
-        compositionMatrixTable += `<table class="R2SetTable">`;
+        compositionMatrixTable += `<table class="compositionMatrixTable_values_table">`;
 
         for(let i = 0; i < compositionMatrix.length; i++)
         {
             compositionMatrixTable += `<tr>`;
             for(let j = 0; j < compositionMatrix[i].length; j++)
             {
-                compositionMatrixTable += `<td><input type="number" ${compositionMatrix[i][j]}</td></td>`;
+                compositionMatrixTable += `<td><input type="number" id="compositionMatrixInput_${i}_${j}" value="${compositionMatrix[i][j]}"></td>`;
             }
 
             compositionMatrixTable += `</tr>`;
         }
 
         compositionMatrixTable += `</table>`;
+    }
+
+    if(templateData.isCompositionMatrixCreated)
+    {
+        compositionMatrixColumnsInput = `<input id="compositionMatrixColumns" type="number" value="` + templateData.compositionMatrixColumns + `"/>`;
+        compositionMatrixRowsInput = `<input id="compositionMatrixRows" type="number" value="` + templateData.compositionMatrixRows +`"/>`
+        significanceMatrixApplyInput = `<input class="btn btn-secondary" id="significanceMatrixApply" type="button" value="Построить альфа стрез"/>`;
+    }
+
+    if(templateData.isSignificanceMatrixCreated && templateData.isCompositionMatrixCreated)
+    {
+        let significanceMatrixTable = `<table class="significanceMatrixTable">`
+        let significanceMatrix = templateData.significanceMatrix;
+
+        for(let i = 0; i < significanceMatrix.length; i++)
+        {
+            significanceMatrixTable += `<tr>`;
+
+            for(let j = 0; j < significanceMatrix[i].length; j++)
+            {
+                significanceMatrixTable += `<td><input type="number" id="significanceMatrixInputId_${i}_${j}" value="${significanceMatrix[i][j]}"></td>`;
+            }
+
+            significanceMatrixTable += `</tr>`;
+        }
+
+        significanceMatrixTable += `</table>`
+
+        significanceMatrixContainer = `
+        <div class="significanceMatrixContainer">
+                <h2>Матрица устойчивости:</h2>
+                ${significanceMatrixTable}
+                <input class="btn btn-success" id="finishLab" type="button" value="Закончить"/>
+                <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Отменить текущий шаг"/>
+        </div>`;
     }
 
     return `
@@ -129,44 +170,52 @@ function getHTML(templateData)
                         </div>
                     </td>                    
                 </tr>
-            </table>                
-            <table class="initialMatrixTable">
-                <th>Исходные матрицы</th>
-                <tr class="initialMatrixes">                    
-                    <td class="initialMatrix">
-                        <div class="initialMatrix_name">
-                            R1 = 
-                        </div>
-                        <div class="initialMatrix_table">
-                            ${R1SetTable}
-                        </div>                     
-                    </td>
-                    <td class="initialMatrix">
-                        <div class="initialMatrix_name">
-                            R2 = 
-                        </div>
-                        <div class="initialMatrix_table">
-                            ${R2SetTable}
-                        </div>                     
-                    </td>                                                            
-                </tr>              
-            </table> 
-            <table class="compositionMatrixTable">
-                <tr class="compositionMatrixSize">
-                    <td>                  
-                        <h2>Введите размерность композиционной матрицы:</h2>
-                        <input id="compositionMatrixRows" type="number"/>
-                        <span>X</span>
-                        <input id="compositionMatrixColumns" type="number"/>
-                        <input class="btn btn-secondary" id="compositionMatrixApply" type="button" value="Создать композиционную матрицу"/>                       
-                    </td>
-                </tr>
-                <tr class="compositionMatrixTable_values">
-                    <td>
-                        ${templateData.isCompositionMatrixCreated ? compositionMatrixTable : ""}
-                    </td>                    
-                </tr>
-            </table>                                                                              
+            </table>    
+            <div class="initialMatrixTableContainer">
+                <h2>Исходные матрицы</h2>
+                <table class="initialMatrixTable">                    
+                    <tr class="initialMatrixes">                    
+                        <td class="initialMatrix">
+                            <div class="initialMatrix_name">
+                                R1 = 
+                            </div>
+                            <div class="initialMatrix_table">
+                                ${R1SetTable}
+                            </div>                     
+                        </td>
+                        <td class="initialMatrix">
+                            <div class="initialMatrix_name">
+                                R2 = 
+                            </div>
+                            <div class="initialMatrix_table">
+                                ${R2SetTable}
+                            </div>                     
+                        </td>                                                            
+                    </tr>              
+                </table>
+            </div>                        
+            <div class="compositionMatrixContainer">
+                <table class="compositionMatrixTable">
+                    <tr class="compositionMatrixSize">
+                        <td>                  
+                            <h2>Введите размерность композиционной матрицы:</h2>
+                            ${compositionMatrixRowsInput}
+                            <span>X</span>
+                            ${compositionMatrixColumnsInput}                                                   
+                        </td>
+                        <td>
+                            <input class="btn btn-secondary" id="compositionMatrixApply" type="button" value="Создать композиционную матрицу"/>
+                        </td>
+                    </tr>
+                    <tr class="compositionMatrixTable_values">
+                        <td>
+                            ${templateData.isCompositionMatrixCreated ? compositionMatrixTable : ""}
+                            ${significanceMatrixApplyInput}                        
+                        </td>                                       
+                    </tr>
+                </table>
+            </div> 
+            ${significanceMatrixContainer}                                                                              
         </div>`;
 }
 
@@ -178,6 +227,7 @@ function initState() {
         compositionMatrixRows: 0,
         isCompositionMatrixCreated: false,
         isSignificanceMatrixCreated: false,
+        isLabDone: false,
         compositionMatrix: [],
     };
 
@@ -220,8 +270,8 @@ function bindActionListeners(appInstance)
 {
     document.getElementById("compositionMatrixApply").addEventListener('click', () => {
         const state = appInstance.state.updateState((state) => {
-            let compositionMatrixColumns = document.getElementById("compositionMatrixColumns").value;
-            let compositionMatrixRows = document.getElementById("compositionMatrixRows").value;
+            let compositionMatrixColumns = parseInt(document.getElementById("compositionMatrixColumns").value);
+            let compositionMatrixRows = parseInt(document.getElementById("compositionMatrixRows").value);
             let compositionMatrix = [];
 
             if(compositionMatrixColumns && compositionMatrixRows &&
@@ -231,10 +281,82 @@ function bindActionListeners(appInstance)
                 compositionMatrix = zeros([compositionMatrixRows, compositionMatrixColumns]);
             }
 
-            return  {
+            return {
                 ...state,
                 compositionMatrix,
                 isCompositionMatrixCreated: true,
+                compositionMatrixColumns,
+                compositionMatrixRows,
+            }
+        });
+
+        // перересовываем приложение
+        appInstance.subscriber.emit('render', state);
+    });
+
+    document.getElementById("significanceMatrixApply").addEventListener('click', () => {
+        const state = appInstance.state.updateState((state) => {
+            let significanceMatrixRows = state.compositionMatrixRows;
+            let significanceMatrixColumns = state.compositionMatrixColumns;
+            let significanceMatrix = zeros([significanceMatrixRows, significanceMatrixColumns]);
+            let compositionMatrix = state.compositionMatrix;
+
+            for(let i = 0; i < compositionMatrix.length; i++)
+            {
+                for(let j = 0; j < compositionMatrix[i].length; j++)
+                {
+                    let compositionMatrixInputId = `compositionMatrixInput_${i}_${j}`;
+                    compositionMatrix[i][j] = parseInt(document.getElementById(compositionMatrixInputId).value);
+                }
+            }
+
+            return {
+                ...state,
+                significanceMatrix,
+                compositionMatrix,
+                isSignificanceMatrixCreated: true,
+            }
+        });
+
+        // перересовываем приложение
+        appInstance.subscriber.emit('render', state);
+    });
+
+    document.getElementById("finishLab").addEventListener('click', () => {
+        const state = appInstance.state.updateState((state) => {
+            let significanceMatrix = state.significanceMatrix.slice();
+            for(let i = 0; i < significanceMatrix.length; i++)
+            {
+                for(let j = 0; j < significanceMatrix[i].length; j++)
+                {
+                    let compositionMatrixInputId = `significanceMatrixInputId_${i}_${j}`;
+                    significanceMatrix[i][j] = parseInt(document.getElementById(compositionMatrixInputId).value);
+                }
+            }
+
+            return {
+                ...state,
+                significanceMatrix,
+                isLabDone: true
+            }
+        });
+
+        // перересовываем приложение
+        appInstance.subscriber.emit('render', state);
+    });
+
+    document.getElementById("cancelSignificanceMatrix").addEventListener('click', () => {
+        const state = appInstance.state.updateState((state) => {
+            let significanceMatrix = state.significanceMatrix.slice();
+            let significanceMatrixRows = state.compositionMatrixRows;
+            let significanceMatrixColumns = state.compositionMatrixColumns;
+            significanceMatrix = zeros([significanceMatrixRows, significanceMatrixColumns]);
+
+            return {
+                ...state,
+                isLabDone: false,
+                isSignificanceMatrixCreated: false,
+                significanceMatrix,
             }
         });
 
@@ -259,7 +381,6 @@ function init_lab() {
             if(document.getElementById("preGeneratedCode") && document.getElementById("preGeneratedCode").value !== "")
             {
                 let jsLab = document.getElementById("jsLab");
-                //todo не парсится джейсон объект. вариант не приходит в интерфейс. посмотреть как в других лабах это делается
                 let generatedVariant = JSON.parse(document.getElementById("preGeneratedCode").value);
                 console.log(generatedVariant);
 
