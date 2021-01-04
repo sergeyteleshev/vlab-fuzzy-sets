@@ -26,8 +26,17 @@ public class GenerateProcessorImpl implements GenerateProcessor {
 
         double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
 
-        double[][] R1Set = generateInitialSet(R1SetRowsAmount, R1SetColumnsAmount);
-        double[][] R2Set = generateInitialSet(R2SetRowsAmount, R2SetColumnsAmount);
+        int n = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+        int m = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+        int k = n;
+
+        while (n == k)
+        {
+            k = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+        }
+
+        double[][] R1Set = generateInitialSet(n, m);
+        double[][] R2Set = generateInitialSet(m, k);
 
 //        double[][] R1Set = {
 //            {0.8, 0.5, 0.2, 0.9},
@@ -44,13 +53,15 @@ public class GenerateProcessorImpl implements GenerateProcessor {
         answer.put("R1Set", R1Set);
         answer.put("R2Set", R2Set);
         answer.put("alpha", alpha);
+        answer.put("m", m);
+        answer.put("n", n);
+        answer.put("k", k);
 
         code = answer.toString();
         text = "Постройте нечетое множество из множетсв R1 и R2. Alpha = " + alpha + ", значащий элемент = " + significantElement;
 
         return new GeneratingResult(text, code, instructions);
     }
-
 
     //todo в столбах нет значащего элемента
     private static double[][] generateInitialSet(int rowsAmount, int columnsAmount)
@@ -102,20 +113,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             if(!isCurrentColumnValid)
             {
                 int randomRowElementIndex = generateRandomIntRange(0, rowsAmount - 1);
-                int validColumn = 0;
-                boolean isValidColumnFound = false;
-                while (!isValidColumnFound)
-                {
-                    for(int t = 0; t < rowsAmount; t++)
-                        if(set[randomRowElementIndex][t] >= significantElement)
-                            continue;
-                        else
-                            validColumn = t;
-
-                    isValidColumnFound = true;
-                }
-
-                set[randomRowElementIndex][validColumn] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
+                set[randomRowElementIndex][i] = roundDoubleToNDecimals(generateRandomDoubleRange(significantElement, setMaxValue), 1);
             }
         }
 
