@@ -74,6 +74,11 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
             comment += compositionMatrixComment + significanceMatrixComment;
         }
 
+        if(points == 1.0)
+        {
+            comment = "Идеально!";
+        }
+
         return new CheckingSingleConditionResult(BigDecimal.valueOf(points), comment);
     }
 
@@ -162,13 +167,13 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
     private static double[][] getCompositionMatrix(double[][] R1Set, double[][] R2Set)
     {
-        double[][] R1R2Set = new double[R1SetRowsAmount][R2SetColumnsAmount];
-        for(int i = 0; i < R1SetRowsAmount; i++)
+        double[][] R1R2Set = new double[R1Set.length][R2Set[0].length];
+        for(int i = 0; i < R1Set.length; i++)
         {
-            for (int j = 0; j < R2SetColumnsAmount; j++)
+            for (int j = 0; j < R2Set[0].length; j++)
             {
-                double[] minElements = new double[R1SetColumnsAmount];
-                for(int k = 0; k < R1SetColumnsAmount; k++)
+                double[] minElements = new double[R1Set[0].length];
+                for(int k = 0; k < R1Set[0].length; k++)
                 {
                     minElements[k] = Math.min(R1Set[i][k], R2Set[k][j]);
                 }

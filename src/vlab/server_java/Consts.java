@@ -1,11 +1,8 @@
 package vlab.server_java;
 
-public class Consts {
-    public static final int R1SetRowsAmount = 3;
-    public static final int R1SetColumnsAmount = 4;
-
-    public static final int R2SetRowsAmount = 4;
-    public static final int R2SetColumnsAmount = 2;
+public class Consts
+{
+    public static final int[] matrixSizes = {2, 3, 4, 5};
 
     public static final double significantElement = 0.7;
     public static final double[] alphaValues = {0.7, 0.8, 0.9};
