@@ -1,53 +1,9 @@
-/*html, body, div, span, applet, object, iframe,*/
-/*h1, h2, h3, h4, h5, h6, p, blockquote, pre,*/
-/*a, abbr, acronym, address, big, cite, code,*/
-/*del, dfn, em, img, ins, kbd, q, s, samp,*/
-/*small, strike, strong, sub, sup, tt, var,*/
-/*b, u, i, center,*/
-/*dl, dt, dd, ol, ul, li,*/
-/*fieldset, form, label, legend,*/
-/*table, caption, tbody, tfoot, thead, tr, th, td,*/
-/*article, aside, canvas, details, embed,*/
-/*figure, figcaption, footer, header, hgroup,*/
-/*menu, nav, output, ruby, section, summary,*/
-/*time, mark, audio, video {*/
-    /*margin: 0;*/
-    /*padding: 0;*/
-    /*border: 0;*/
-    /*font-size: 100%;*/
-    /*font: inherit;*/
-    /*vertical-align: baseline;*/
-/*}*/
-/*!* HTML5 display-role reset for older browsers *!*/
-/*article, aside, details, figcaption, figure,*/
-/*footer, header, hgroup, menu, nav, section {*/
-    /*display: block;*/
-/*}*/
-/*body {*/
-    /*line-height: 1;*/
-/*}*/
-/*ol, ul {*/
-    /*list-style: none;*/
-/*}*/
-/*blockquote, q {*/
-    /*quotes: none;*/
-/*}*/
-/*blockquote:before, blockquote:after,*/
-/*q:before, q:after {*/
-    /*content: '';*/
-    /*content: none;*/
-/*}*/
-/*table {*/
-    /*border-collapse: collapse;*/
-    /*border-spacing: 0;*/
-/*}*/
-
-body
+#jsLab body
 {
     font-family: Calibri, serif;
 }
 
-.lab-header
+#jsLab .lab-header
 {
     display: inline-flex;
     justify-content: space-between;
@@ -55,19 +11,19 @@ body
     align-items: center;
 }
 
-.initialMatrixTable
+#jsLab .initialMatrixTable
 {
     width: 100%;
 }
 
-.compositionMatrixSize
+#jsLab .compositionMatrixSize
 {
     height: 100px;
     margin-left: 10px;
     width: 100%;
 }
 
-.lab-header_name
+#jsLab .lab-header_name
 {
     position: relative;
     width: 100%;
@@ -76,19 +32,28 @@ body
     font-weight: bold;
 }
 
-.compositionMatrixSize h2, .significanceMatrixContainer h2, .initialMatrixTableContainer h2
+#jsLab .compositionMatrixSize h2, #jsLab .significanceMatrixContainer h2
 {
+    text-align: left;
     font-size: 16px;
     font-weight: bold;
 }
 
-.compositionMatrixSize span
+#jsLab .initialMatrixTableContainer h2
+{
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#jsLab .compositionMatrixSize span
 {
     margin-left: 5px;
     margin-right: 5px;
 }
 
-#compositionMatrixColumns, #compositionMatrixRows
+#jsLab #compositionMatrixColumns, #jsLab #compositionMatrixRows
 {
     text-align: center;
     width: 30px;
@@ -96,7 +61,7 @@ body
     border: 1px solid #d7d7d7;
 }
 
-.lab
+#jsLab .lab
 {
     display: flex;
     flex-direction: column;
@@ -106,7 +71,7 @@ body
     margin: 20px auto;
 }
 
-.lab-info
+#jsLab .lab-info
 {
     background: #42b4d9;
     color: white;
@@ -116,28 +81,33 @@ body
     cursor: pointer;
 }
 
-#container {
+#jsLab #container {
     width: 100%;
 }
 
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+#jsLab input::-webkit-outer-spin-button,
+#jsLab input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
 /* Firefox */
-input[type=number] {
+#jsLab input[type=number] {
     -moz-appearance: textfield;
 }
 
-.initialMatrix table td, .initialMatrix table TH
+#jsLab .initialMatrix table td, #jsLab .initialMatrix table TH
 {
     border: 1px solid #d7d7d7; /* Параметры рамки */
 }
 
-.lab-table
+#jsLab .modal-body iframe
+{
+    width: 100%;
+}
+
+#jsLab .lab-table
 {
     width: 100%;
     border: 1px solid #d7d7d7;
@@ -146,25 +116,25 @@ input[type=number] {
     padding: 10px 10px;
 }
 
-.lab-table tr:first-child td
+#jsLab .lab-table tr:first-child td
 {
     padding: 10px 20px;
 }
 
-.initialMatrix
+#jsLab .initialMatrix
 {
     display: inline-flex;
     justify-content: space-between;
 }
 
-.initialMatrix_name
+#jsLab .initialMatrix_name
 {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.initialMatrix_table
+#jsLab .initialMatrix_table
 {
     margin-left: 10px;
     display: flex;
@@ -172,44 +142,47 @@ input[type=number] {
     justify-content: center;
 }
 
-.initialMatrix table td
+#jsLab .initialMatrix table td
 {
     padding: 10px;
     text-align: center;
 }
 
-.initialMatrix:not(:first-child)
+#jsLab .initialMatrix:not(:first-child)
 {
     margin-left: 40px;
 }
 
-.initialMatrixes
+#jsLab .initialMatrixes
 {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
     margin-top: 20px;
 }
 
-.compositionMatrixTable_values_table tr td, .significanceMatrixTable tr td
+#jsLab .compositionMatrixTable_values_table tr td, #jsLab .significanceMatrixTable tr td
 {
     border: 1px solid #d7d7d7;
 }
 
-.compositionMatrixTable input[type="number"], .significanceMatrixTable input[type="number"]
+#jsLab .compositionMatrixTable input[type="number"], #jsLab .significanceMatrixTable input[type="number"]
 {
     border: none;
 }
 
-.compositionMatrixTable tr td
+#jsLab .compositionMatrixTable tr td
 {
     width: 30px;
     height: 30px;
 }
 
-#compositionMatrixApply
+#jsLab #compositionMatrixApply
 {
     margin-left: 20px;
 }
 
-.compositionMatrixContainer, .initialMatrixTableContainer, .significanceMatrixContainer
+#jsLab .compositionMatrixContainer, #jsLab .initialMatrixTableContainer, #jsLab .significanceMatrixContainer
 {
     padding: 20px;
     width: 100%;
@@ -217,20 +190,40 @@ input[type=number] {
     border-top: none;
 }
 
-#significanceMatrixApply, #finishLab, #cancelSignificanceMatrix, #cancelCompositionMatrix
+#jsLab #significanceMatrixApply, #jsLab #finishLab, #jsLab #cancelSignificanceMatrix, #jsLab #cancelCompositionMatrix
 {
     margin-top: 10px;
 }
 
-#cancelSignificanceMatrix, #cancelCompositionMatrix
+#jsLab #cancelSignificanceMatrix, #jsLab #cancelCompositionMatrix
 {
     margin-left: 10px;
 }
 
-.compositionMatrixButtons
+#jsLab .compositionMatrixButtons
 {
     display: inline-flex;
     justify-content: flex-start;
     align-items: flex-start;
     width: 100%;
+}
+
+#jsLab .initialMatrixTableContainer
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#jsLab .significanceMatrixContainer
+{
+    text-align: left;
+}
+
+#jsLab .compositionMatrixTable
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
 }

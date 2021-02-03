@@ -59,8 +59,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
             comment += "Неверное количество строк в композиционной матрице.";
         }
 
-        if(points == compositionMatrixSizePoints)
-        {
+        if(points == compositionMatrixSizePoints) {
             JSONObject compositionMatrixCheckAnswer = checkCompositionMatrix(serverCompositionMatrix, clientCompositionMatrix, compositionMatrixPoints);
             JSONObject significanceMatrixCheckAnswer = checkSignificanceMatrix(serverSignificanceMatrix, clientSignificanceMatrix, significanceMatrixPoints);
 
@@ -72,11 +71,6 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
             points += compositionMatrixPoints + significanceMatrixPoints;
             comment += compositionMatrixComment + significanceMatrixComment;
-        }
-
-        if(points == 1.0)
-        {
-            comment = "Идеально!";
         }
 
         return new CheckingSingleConditionResult(BigDecimal.valueOf(points), comment);

@@ -3,8 +3,10 @@ package vlab.server_java.generate;
 import rlcp.generate.GeneratingResult;
 import rlcp.server.processor.generate.GenerateProcessor;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.json.JSONObject;
@@ -19,51 +21,44 @@ public class GenerateProcessorImpl implements GenerateProcessor {
     @Override
     public GeneratingResult generate(String condition) {
         //do Generate logic here
-        String text = "text";
-        String code = "code";
-        String instructions = "instructions";
-        JSONObject answer = new JSONObject();
-
-        double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
-
-        int n = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
-        int m = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
-        int k = n;
-
-        while (n == k)
+        try
         {
-            k = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+            String text = "text";
+            String code = "code";
+            String instructions = "instructions";
+            JSONObject answer = new JSONObject();
+
+            double alpha = alphaValues[generateRandomIntRange(0, alphaValues.length - 1)];
+
+            int n = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+            int m = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+            int k = n;
+
+            while (n == k)
+            {
+                k = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
+            }
+
+            double[][] R1Set = generateInitialSet(n, m);
+            double[][] R2Set = generateInitialSet(m, k);
+
+            answer.put("R1Set", R1Set);
+            answer.put("R2Set", R2Set);
+            answer.put("alpha", alpha);
+            answer.put("m", m);
+            answer.put("n", n);
+            answer.put("k", k);
+
+            code = answer.toString();
+            text = "Постройте нечетое множество из множетсв R1 и R2. Alpha = " + alpha + ", значащий элемент = " + significantElement;
+            return new GeneratingResult(text, code, instructions);
         }
-
-        double[][] R1Set = generateInitialSet(n, m);
-        double[][] R2Set = generateInitialSet(m, k);
-
-//        double[][] R1Set = {
-//            {0.8, 0.5, 0.2, 0.9},
-//            {1, 0.9, 0.7, 0.3},
-//            {0.7, 0.5, 0, 0.5},
-//        };
-//        double[][] R2Set = {
-//            {0.8, 0.5},
-//            {0.2, 0.7},
-//            {0.9, 0.3},
-//            {1, 0.7},
-//        };
-
-        answer.put("R1Set", R1Set);
-        answer.put("R2Set", R2Set);
-        answer.put("alpha", alpha);
-        answer.put("m", m);
-        answer.put("n", n);
-        answer.put("k", k);
-
-        code = answer.toString();
-        text = "Постройте нечетое множество из множетсв R1 и R2. Alpha = " + alpha + ", значащий элемент = " + significantElement;
-
-        return new GeneratingResult(text, code, instructions);
+        catch(IllegalArgumentException ioex)
+        {
+            throw new IllegalArgumentException(ioex);
+        }
     }
 
-    //todo в столбах нет значащего элемента
     private static double[][] generateInitialSet(int rowsAmount, int columnsAmount)
     {
         double[][] set = new double[rowsAmount][columnsAmount];
