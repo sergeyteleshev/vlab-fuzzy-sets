@@ -425,7 +425,7 @@ function init_lab() {
 
         getCondition: function(){},
         getResults: function(){
-            return appInstance.state.getState();
+            return JSON.stringify(appInstance.state.getState());
         },
         calculateHandler: function(text, code){},
     }
