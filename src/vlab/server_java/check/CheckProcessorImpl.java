@@ -76,7 +76,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         return new CheckingSingleConditionResult(BigDecimal.valueOf(points), comment);
     }
 
-    static JSONObject checkSignificanceMatrix(int[][] clientAnswer, int[][] serverAnswer, double points)
+    static JSONObject checkSignificanceMatrix(int[][] serverAnswer, int[][] clientAnswer, double points)
     {
         double matrixColumnsAmount = serverAnswer.length;
         double matrixRowsAmount = serverAnswer[0].length;
@@ -95,7 +95,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         clientPoints += deltaPoints;
                     else
                     {
-                        comment.append("Неверное значение элемента SM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы устойчивости. ");
+                        comment.append("Неверное значение элемента SM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы альфа-среза. ");
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         clientPoints += deltaPoints;
                     else
                     {
-                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] композиционной матрицы. ");
+                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы композиции. ");
                     }
                 }
             }
@@ -185,7 +185,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
         for(int i = 0; i < significanceMatrix.length; i++)
         {
-            for(int j = 0; j < significanceMatrix[0].length; j++)
+            for(int j = 0; j < significanceMatrix[i].length; j++)
             {
                 if(compositionMatrix[i][j] >= alpha)
                 {
