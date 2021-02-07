@@ -39,21 +39,21 @@ public class GenerateProcessorImpl implements GenerateProcessor {
                 k = matrixSizes[generateRandomIntRange(0, matrixSizes.length - 1)];
             }
 
-//            double[][] R1Set = generateInitialSet(n, m);
-//            double[][] R2Set = generateInitialSet(m, k);
+            double[][] R1Set = generateInitialSet(n, m);
+            double[][] R2Set = generateInitialSet(m, k);
 
-            double[][] R1Set = {
-                    {0.8, 0.5, 0.2, 0.9},
-                    {1, 0.9, 0.7, 0.3},
-                    {0.7, 0.5, 0, 0.5}
-            };
-
-            double[][] R2Set = {
-                    {0.8, 0.5},
-                    {0.2, 0.7},
-                    {0.9, 0.3},
-                    {1, 0.7}
-            };
+//            double[][] R1Set = {
+//                    {0.8, 0.5, 0.2, 0.9},
+//                    {1, 0.9, 0.7, 0.3},
+//                    {0.7, 0.5, 0, 0.5}
+//            };
+//
+//            double[][] R2Set = {
+//                    {0.8, 0.5},
+//                    {0.2, 0.7},
+//                    {0.9, 0.3},
+//                    {1, 0.7}
+//            };
 
             answer.put("R1Set", R1Set);
             answer.put("R2Set", R2Set);

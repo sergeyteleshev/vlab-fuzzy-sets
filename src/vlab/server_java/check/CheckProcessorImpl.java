@@ -35,11 +35,10 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         int clientCompositionMatrixColumns = jsonInstructions.getInt("compositionMatrixColumns");
         int clientCompositionMatrixRows = jsonInstructions.getInt("compositionMatrixRows");
 
-
         double[][] serverCompositionMatrix = getCompositionMatrix(serverR1Set, serverR2Set);
         int[][] serverSignificanceMatrix = getSignificanceMatrix(serverCompositionMatrix, alpha);
-        double serverCompositionMatrixRows = serverCompositionMatrix.length;
-        double serverCompositionMatrixColumns = serverCompositionMatrix[0].length;
+        int serverCompositionMatrixRows = serverCompositionMatrix.length;
+        int serverCompositionMatrixColumns = serverCompositionMatrix[0].length;
 
         if(serverCompositionMatrixColumns == clientCompositionMatrixColumns)
         {
@@ -78,8 +77,8 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
 
     static JSONObject checkSignificanceMatrix(int[][] serverAnswer, int[][] clientAnswer, double points)
     {
-        double matrixColumnsAmount = serverAnswer.length;
-        double matrixRowsAmount = serverAnswer[0].length;
+        int matrixColumnsAmount = serverAnswer.length;
+        int matrixRowsAmount = serverAnswer[0].length;
         double deltaPoints = points / (matrixColumnsAmount * matrixRowsAmount);
         double clientPoints = 0;
         StringBuilder comment = new StringBuilder();
