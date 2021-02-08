@@ -116,7 +116,7 @@ function getHTML(templateData)
         <div class="significanceMatrixContainer">
             <h2>Матрица альфа-среза:</h2>
             ${significanceMatrixTable}
-            <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Отменить текущий шаг"/>
+            <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Назад"/>
         </div>`;
     }
 
@@ -126,7 +126,7 @@ function getHTML(templateData)
                 <tr>
                     <td>
                         <div class="lab-header">                          
-                            <span class="lab-header_name">Нечеткие множества</span>
+                            <span class="lab-header_name">Композиция отношений</span>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#exampleModalScrollable">
                               Справка
@@ -162,7 +162,7 @@ function getHTML(templateData)
                     <div class="initialMatrixes">                    
                         <div class="initialMatrix">
                             <div class="initialMatrix_name">
-                                R<sub>1</sub> = 
+                                M<sub>R<sub>1</sub></sub> = 
                             </div>
                             <div class="initialMatrix_table">
                                 ${R1SetTable}
@@ -170,7 +170,7 @@ function getHTML(templateData)
                         </div>
                         <div class="initialMatrix">
                             <div class="initialMatrix_name">
-                                R<sub>2</sub> = 
+                                M<sub>R<sub>2</sub></sub> = 
                             </div>
                             <div class="initialMatrix_table">
                                 ${R2SetTable}
@@ -184,9 +184,11 @@ function getHTML(templateData)
                     <tr class="compositionMatrixSize">
                         <td>                  
                             <h2>Ввести размерность матрицы композиции:</h2>
-                            ${compositionMatrixRowsInput}
-                            <span>X</span>
-                            ${compositionMatrixColumnsInput}                                                                               
+                            <div class="compositionMatrixSize_div">
+                                ${compositionMatrixRowsInput}
+                                <span>X</span>
+                                ${compositionMatrixColumnsInput}
+                            </div>                                                                                                          
                         </td>
                         <td>
                             <input class="btn btn-secondary" id="compositionMatrixApply" type="button" value="Создать матрицу" ${templateData.isCompositionMatrixCreated ? "disabled" : ""}/>                                                        
@@ -348,12 +350,14 @@ function bindActionListeners(appInstance)
                     ...state,
                     isSignificanceMatrixCreated: false,
                     isCompositionMatrixCreated: false,
+                    significanceMatrix: [],
                 }
             });
 
             appInstance.subscriber.emit('render', state);
         });
     }
+
 
     if(document.body.contains(document.getElementById("cancelCompositionMatrix")))
     {

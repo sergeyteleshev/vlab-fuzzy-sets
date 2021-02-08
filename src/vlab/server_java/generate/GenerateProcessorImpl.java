@@ -63,7 +63,7 @@ public class GenerateProcessorImpl implements GenerateProcessor {
             answer.put("k", k);
 
             code = answer.toString();
-            text = "Уровень α = " + alpha + ", значащий элемент = " + significantElement;
+            text = "Уровень &#9082; = " + alpha;
             return new GeneratingResult(text, code, instructions);
         }
         catch(IllegalArgumentException ioex)
