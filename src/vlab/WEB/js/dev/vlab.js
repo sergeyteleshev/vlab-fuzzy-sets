@@ -114,7 +114,7 @@ function getHTML(templateData)
 
         significanceMatrixContainer = `
         <div class="significanceMatrixContainer">
-            <h2>Матрица альфа-среза:</h2>
+            <h2>Матрица &#9082;-среза:</h2>
             ${significanceMatrixTable}
             <input class="btn btn-danger" type="button" id="cancelSignificanceMatrix" value="Назад"/>
         </div>`;
