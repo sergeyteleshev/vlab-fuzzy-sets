@@ -160,7 +160,6 @@
     align-items: center;
     margin-top: 20px;
 }
-
 #jsLab .compositionMatrixTable_values_table tr td, #jsLab .significanceMatrixTable tr td
 {
     border: 1px solid #d7d7d7;
@@ -170,6 +169,7 @@
 {
     border: none;
 }
+
 
 #jsLab .compositionMatrixTable tr td
 {

@@ -62,10 +62,10 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
             JSONObject compositionMatrixCheckAnswer = checkCompositionMatrix(serverCompositionMatrix, clientCompositionMatrix, compositionMatrixPoints);
             JSONObject significanceMatrixCheckAnswer = checkSignificanceMatrix(serverSignificanceMatrix, clientSignificanceMatrix, significanceMatrixPoints);
 
-            double compositionMatrixPoints = compositionMatrixCheckAnswer.getDouble("points");
+            double compositionMatrixPoints = roundDoubleToNDecimals(compositionMatrixCheckAnswer.getDouble("points"), 2);
             String compositionMatrixComment = compositionMatrixCheckAnswer.getString("comment");
 
-            double significanceMatrixPoints = significanceMatrixCheckAnswer.getDouble("points");
+            double significanceMatrixPoints = roundDoubleToNDecimals(significanceMatrixCheckAnswer.getDouble("points"), 2);
             String significanceMatrixComment = significanceMatrixCheckAnswer.getString("comment");
 
             points += compositionMatrixPoints + significanceMatrixPoints;
@@ -94,7 +94,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         clientPoints += deltaPoints;
                     else
                     {
-                        comment.append("Неверное значение элемента SM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы альфа-среза. ");
+                        comment.append("Неверное значение элемента SM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы альфа-среза: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");;
                     }
                 }
             }
@@ -111,7 +111,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
         return result;
     }
 
-    static JSONObject checkCompositionMatrix(double[][] clientAnswer, double[][] serverAnswer, double points)
+    static JSONObject checkCompositionMatrix(double[][] serverAnswer, double[][] clientAnswer, double points)
     {
         double matrixColumnsAmount = serverAnswer.length;
         double matrixRowsAmount = serverAnswer[0].length;
@@ -130,7 +130,7 @@ public class CheckProcessorImpl implements PreCheckResultAwareCheckProcessor<Str
                         clientPoints += deltaPoints;
                     else
                     {
-                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы композиции. ");
+                        comment.append("Неверное значение элемента CM[").append(Integer.toString(i + 1)).append(", ").append(Integer.toString(j + 1)).append("] матрицы композиции: sys = ").append(serverAnswer[i][j]).append("; user = ").append(clientAnswer[i][j]).append(". ");
                     }
                 }
             }
